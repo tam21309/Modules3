@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Test\\CalculatorTest::testCong1":4,"Test\\CalculatorTest::testCong2":3},"times":{"Test\\FirstTest::testTrueIsTrue":0,"Test\\CalculatorTest::testCong1":0.005,"Test\\CalculatorTest::testCong2":0}}

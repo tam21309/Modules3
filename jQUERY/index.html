@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row mt-3">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-10">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Recipient's username"
+                  aria-label="Recipient's username"
+                  aria-describedby="button-addon2"
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="search"
+                >
+                  Button
+                </button>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <button class="btn btn-primary add-btn" type="button">
+                Add new
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <table class="table">
+            <thead>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Dob</th>
+              <th>Action</th>
+            </thead>
+            <tbody id="ket_qua">
+              <!-- <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model ADD NEW -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="hidden" name="id" id="id" />
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  aria-describedby="emailHelp"
+                />
+                <p id="name_error" style="color: red"></p>
+                <div id="emailHelp" class="form-text">
+                  We'll never share your email with anyone else.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label"
+                  >Email</label
+                >
+                <input type="email" class="form-control" id="email" />
+                <p id="email_error" style="color: red"></p>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label"
+                  >dob</label
+                >
+                <input type="date" class="form-control" id="dob" />
+                <p id="dob_error" style="color: red"></p>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="btnSave">
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal delete -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function getList() {
+        let options = {
+          url: "http://127.0.0.1:8000/api/customers",
+          method: "GET",
+          dataType: "json",
+          success: function (response) {
+            let html = "";
+            $.each(response, function (key, value) {
+              html += "<tr>";
+              html += "<td>" + value.name + "</td>";
+              html += "<td>" + value.email + "</td>";
+              html += "<td>" + value.dob + "</td>";
+              html += "<td>";
+              html +=
+                '<button class="btn btn-info me-1 edit-btn" data-id="' +
+                value.id +
+                '">Edit</button>';
+              html +=
+                '<button class="btn btn-danger delete-btn" data-id="' +
+                value.id +
+                '">Delete</button>';
+              html += "</td>";
+              html += "</tr>";
+            });
+            $("#ket_qua").html(html);
+          },
+        };
+        $.ajax(options);
+      }
+
+      getList();
+
+      // Bat su kien nhan nut save
+      $("#btnSave").on("click", function () {
+        let id = $("#id").val();
+        let name = $("#name").val();
+        let dob = $("#dob").val();
+        let email = $("#email").val();
+        if (!name) {
+          $("#name_error").html("truong bat buoc");
+        }
+        if (!dob) {
+          $("#dob_error").html("truong bat buoc");
+        }
+        if (!email) {
+          $("#email_error").html("truong bat buoc");
+        }
+
+        if (id) {
+          var option = {
+            url: "http://127.0.0.1:8000/api/customers/" + id,
+            method: "PUT",
+            dataType: "json",
+            data: {
+              name: $("#name").val(),
+              dob: $("#dob").val(),
+              email: $("#email").val(),
+            },
+            success: function (response) {
+              getList();
+              $("#id").val(0);
+            },
+          };
+        } else {
+          var option = {
+            url: "http://127.0.0.1:8000/api/customers",
+            method: "POST",
+            dataType: "json",
+            data: {
+              name: $("#name").val(),
+              dob: $("#dob").val(),
+              email: $("#email").val(),
+            },
+            success: function (response) {
+              getList();
+            },
+          };
+        }
+
+        $.ajax(option);
+        $("#addModal").modal("hide");
+        // alert("lưu");
+      });
+
+      // Bat su kien nhan nut them moi
+      $(".add-btn").on("click", function () {
+        // goi modal
+        $("#addModal").modal("show");
+      });
+
+      // Bat su kien sau khi ajax goi
+      $("body").on("click", ".edit-btn", function () {
+        //lay id
+        let id = $(this).data("id");
+        // Goi ajax
+        let option = {
+          url: "http://127.0.0.1:8000/api/customers/" + id,
+          method: "GET",
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+            $("#name").val(response.name);
+            $("#email").val(response.email);
+            $("#dob").val(response.dob);
+            $("#id").val(response.id);
+          },
+        };
+        $.ajax(option);
+        // Dua vao cac o input trong form
+        // Goi modal
+        $("#addModal").modal("show");
+        // alert("edit: " + id);
+      });
+
+      // Bat su kien sau khi ajax goi
+      $("body").on("click", ".delete-btn", function () {
+        // Lay id
+        let id = $(this).data("id");
+        alert("delete: " + id);
+        // Dua vao cac o input trong form
+        // Goi modal
+        $("#deleteModal").modal("show");
+      });
+    </script>
+  </body>
+</html>
+        <script>
+        getList();
+        // Bat su kien nhan nut save
+        $('#btnSave').on('click', function () {
+            let name =  $('#name').val();
+            let dob=  $('#dob').val();
+            let email =  $('#email').val();
+          if(!name){
+            $('#name_error').html('truong bat buoc');
+          }
+          if(!dob){
+            $('#dob_error').html('truong bat buoc');}
+          if(!email){
+            $('#email_error').html('truong bat buoc');
+          }
+          else{
+            let options = {
+                url: 'http://127.0.0.1:8000/api/customers',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    dob: dob,
+                    email: email
+                },
+                success: function(response){
+                    console.log(response);
+                    // $('#completeModal').modal('hide');
+                    $('#addModal').modal('toggle');
+                    getList();
+                }
+            }
+            // $('#my_div').load('/path/to/server/source');
+            $.ajax(options);
+            alertify.success('Thêm mới thành công');
+          }
+            // alert('save form')
+        })
+        // Bat su kien nhan nut them moi
+        $('.add-btn').on('click', function () {
+            // goi modal
+            $('#addModal').modal('show');
+        })
+        // Bat su kien sau khi ajax goi
+        $('body').on('click', '.edit-btn', function () {
+            //lay id
+            let id = $(this).data('id');
+            // Goi ajax
+            // Dua vao cac o input trong form
+            // Goi modal
+            $('#addModal').modal('show');
+            alert('edit: '+ id)
+        });
+        // Bat su kien sau khi ajax goi
+        $('body').on('click', '.delete-btn', function () {
+            // Lay id
+            let id = $(this).data('id');
+            alert('delete: '+ id)
+            // Dua vao cac o input trong form
+            // Goi modal
+            $('#deleteModal').modal('show');
+        });
+    </script>
+</body>
+</html>

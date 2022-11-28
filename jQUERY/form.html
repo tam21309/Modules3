@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+    <form action="" method="get">
+        <p>
+            Username: <input type="text" id="username" name="username">
+            <span id="username_error"></span>
+        </p>
+        <p>
+            Password: <input type="password" id="password" name="password">
+            <span id="password_error"></span>
+        </p>
+        <p>
+            <input type="button" value="Login" id="login">
+        </p>
+    </form>
+    <script>
+        // bắt sự kiện click
+        $('#login').click(function(){
+            // xóa lỗi đã có trước
+            $('.error').html('');
+            // lấy giá trị ở username
+           let username = $('#username').val();
+           //lấy giá trị ở password
+           let password = $('#password').val();
+
+           // xác thực dữ liệu
+           if( username == ''){
+            $('#username_error').html('Truong bat buoc');
+            
+           }
+           if( password == ''){
+            $('#password_error').html('Truong bat buoc');
+            
+           }
+           if( password && username){
+            alert('xu li');
+            let options = {
+                url: 'http://127.0.0.1:8000/api/customers',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    name: 'Nguyen Van C',
+                    dob: '2022-10-10',
+                    email: 'van@gmail.com'
+                },
+                success: function(response){
+                    console.log(response);
+                }
+            }
+            $.ajax(options);
+           }
+        });
+    </script>
+</body>
+</html>
